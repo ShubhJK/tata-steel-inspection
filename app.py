@@ -31,8 +31,22 @@ p, label, .stMarkdown { color: #0A1F44; font-size: 1.1rem; font-weight: 500; }
 
 /* Tabs Styling */
 .stTabs [data-baseweb="tab-list"] { gap: 20px; }
-.stTabs [data-baseweb="tab"] { background-color: rgba(255, 255, 255, 0.4); border-radius: 8px 8px 0 0; padding: 10px 20px; font-weight: 700; color: #0A1F44;}
-.stTabs [aria-selected="true"] { background-color: #0A1F44 !important; color: #FFD700 !important; }
+.stTabs [data-baseweb="tab"] { 
+    background-color: rgba(255, 255, 255, 0.6); 
+    border-radius: 8px 8px 0 0; 
+    padding: 10px 20px; 
+    font-weight: 700; 
+    color: #0A1F44 !important; 
+}
+.stTabs [data-baseweb="tab"]:hover {
+    background-color: #00A8A8;
+}
+.stTabs [aria-selected="true"] { 
+    background-color: #008080 !important; 
+}
+.stTabs [aria-selected="true"] * { 
+    color: #FFFFFF !important; 
+}
 
 /* Custom Metric Cards */
 .metric-card { background-color: #0A1F44; padding: 20px; border-radius: 12px; border-left: 8px solid #008080; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 15px; }
