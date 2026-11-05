@@ -2,7 +2,7 @@
 
 An end-to-end, enterprise-grade Deep Learning pipeline for detecting micro-level surface defects on steel plates, utilizing **Transfer Learning**, **Explainable AI (Grad-CAM)**, and **High-Resolution Sliding-Window Inference**. 
 
-🔗 **[View the Live Deployed Application Here](YOUR_STREAMLIT_URL_HERE)** *(Replace with your actual Streamlit link)*
+🔗 **[View the Live Deployed Application Here](https://tata-steel-inspection-gyappgxsbxa8axr6mrv8xyw.streamlit.app/)** 
 
 ## 🚀 Key Features
 * **High-Performance CNN**: Fine-tuned **EfficientNet-B0** for 6-class steel defect classification (crazing, inclusion, patches, pitted surface, rolled-in scale, scratches).
