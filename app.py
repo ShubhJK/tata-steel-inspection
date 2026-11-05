@@ -124,7 +124,7 @@ with tab2:
         h, w, _ = img_np.shape
         
         patch_size = 224
-        stride = 112 # 50% overlap to catch edge cracks
+        stride = 112 # 50% overlap
         
         patches = []
         coords = []
@@ -136,11 +136,10 @@ with tab2:
                 patches.append(patch)
                 coords.append((x, y))
                 
-        if not patches: # Fallback for small images
+        if not patches:
             st.warning("Image is smaller than 224x224. Please upload a larger high-res image.")
         else:
             with st.spinner(f"Scanning {len(patches)} micro-patches..."):
-                # Batch inference for speed
                 defective_boxes = []
                 batch_size = 32
                 for i in range(0, len(patches), batch_size):
@@ -158,17 +157,33 @@ with tab2:
                 overlay_img = img_np.copy()
                 for (box, cls_name, conf) in defective_boxes:
                     x, y = box
-                    # Draw Teal Box
-                    cv2.rectangle(overlay_img, (x, y), (x+patch_size, y+patch_size), (0, 128, 128), 3)
-                    # Add label
+                    # Thicker Teal Box (thickness=5) for better visibility
+                    cv2.rectangle(overlay_img, (x, y), (x+patch_size, y+patch_size), (0, 128, 128), 5)
+                    # Larger Label
                     label = f"{cls_name} {conf*100:.1f}%"
-                    cv2.putText(overlay_img, label, (x+5, y+20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+                    cv2.putText(overlay_img, label, (x+10, y+30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2)
 
-                st.success(f"Scan Complete! Found {len(defective_boxes)} defective micro-regions.")
+                if len(defective_boxes) > 0:
+                    st.success(f"Scan Complete! Found {len(defective_boxes)} defective micro-regions.")
+                else:
+                    st.success("Scan Complete! No defects found above the threshold.")
                 
                 c1, c2 = st.columns(2)
                 c1.image(img_pil, caption="High-Res Original", use_container_width=True)
                 c2.image(overlay_img, caption="Micro-Crack Detection Overlay", use_container_width=True)
+
+                # --- NEW: ZOOM INTO DEFECTS ---
+                if len(defective_boxes) > 0:
+                    st.markdown("---")
+                    st.subheader("🔍 Zoomed-in Micro-Crack Details")
+                    st.write("Here are the exact 224x224 patches that triggered the AI's alarm:")
+                    
+                    # Show up to 4 cropped defects
+                    cols = st.columns(min(len(defective_boxes), 4))
+                    for idx_loop, (box, cls_name, conf) in enumerate(defective_boxes[:4]):
+                        x, y = box
+                        crop = img_np[y:y+patch_size, x:x+patch_size]
+                        cols[idx_loop].image(crop, caption=f"{cls_name.title()} ({conf*100:.1f}%)", use_container_width=True)
 
 # ==========================================
 # TAB 3: MODEL PERFORMANCE
